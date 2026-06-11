@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
+/*
+  Juliette — design system
+  Vintage editorial / old-money fairytale.
+  Brand palette + typography are declared as Tailwind v4 theme tokens so they
+  become utilities automatically (e.g. bg-cream, text-espresso, font-playfair).
+*/
+
+@theme {
+  /* Brand palette */
+  --color-espresso: #43342a; /* primary text, headers, buttons */
+  --color-cream: #f5efe2; /* main background */
+  --color-kraft: #c8af8a; /* secondary sections, cards */
+  --color-rose: #c9a6a0; /* accents, sale tags, hover */
+  --color-sage: #8a9a7b; /* secondary accent, in-stock tags */
+  --color-ink: #211a18; /* footer / near-black */
+
+  /* Tints used for hairlines, hovers, washes */
+  --color-kraft-soft: #e7dcc7;
+  --color-rose-soft: #e3cfca;
+  --color-cream-deep: #efe6d4;
+
+  /* Typography (loaded via next/font in layout.tsx) */
+  --font-playfair: var(--font-playfair-display);
+  --font-cormorant: var(--font-cormorant);
+  --font-cinzel: var(--font-cinzel);
+  --font-allura: var(--font-allura);
+  --font-italianno: var(--font-italianno);
+
+  /* Default body + heading families */
+  --font-sans: var(--font-cormorant), Georgia, serif;
+  --font-serif: var(--font-playfair-display), Georgia, serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-cream);
+  --foreground: var(--color-espresso);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    font-family: var(--font-cormorant), Georgia, serif;
+    font-size: 1.0625rem; /* Cormorant reads small; nudge up */
+    line-height: 1.7;
+    /* Subtle warm paper grain */
+    background-image: var(--paper-grain);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-playfair-display), Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  /* Cinzel small-caps labels */
+  .label-caps {
+    font-family: var(--font-cinzel), serif;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  .font-logo {
+    font-family: var(--font-allura), cursive;
+  }
+
+  /* Italianno tagline script */
+  .font-tagline {
+    font-family: var(--font-italianno), cursive;
+  }
+
+  ::selection {
+    background-color: var(--color-rose);
+    color: var(--color-cream);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Paper grain texture — a tiny inline SVG noise, no external asset, no cost */
+:root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+@layer components {
+  /* Hairline divider */
+  .hairline {
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-espresso) 18%, transparent);
+  }
+
+  /* Primary button — espresso fill */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-cinzel), serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    padding: 0.95rem 2.1rem;
+    border: 1px solid var(--color-espresso);
+    background-color: var(--color-espresso);
+    color: var(--color-cream);
+    cursor: pointer;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  }
+  .btn:hover {
+    background-color: var(--color-rose);
+    border-color: var(--color-rose);
+    color: var(--color-cream);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Outline / ghost button */
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-espresso);
+  }
+  .btn-ghost:hover {
+    background-color: var(--color-espresso);
+    color: var(--color-cream);
+    border-color: var(--color-espresso);
+  }
+
+  .field {
+    width: 100%;
+    background-color: var(--color-cream);
+    border: 1px solid color-mix(in srgb, var(--color-espresso) 25%, transparent);
+    padding: 0.8rem 1rem;
+    font-family: var(--font-cormorant), serif;
+    font-size: 1rem;
+    color: var(--color-espresso);
+    transition: border-color 0.3s ease;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-rose);
+  }
+}
+
+/* Gentle entrance animations (respect reduced-motion) */
+@layer utilities {
+  .fade-up {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 1.4s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up, .fade-in { animation: none; opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
 }
