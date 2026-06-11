@@ -44,17 +44,6 @@ export default async function Home() {
           className="fade-in mt-3 w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
         />
 
-        <h1 className="fade-up mt-6 text-xl sm:text-3xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
-          The little details that make
-          <span className="italic"> any outfit </span>
-          a fairytale.
-        </h1>
-
-        <p className="fade-up mt-4 max-w-md mx-auto text-espresso/68 text-base [animation-delay:0.36s]">
-          Detachable cuffs, sleeves, bandanas and accessories —
-          handmade in Lahore, in small batches.
-        </p>
-
         <div className="fade-up mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
           <Link href="/shop" className="btn !py-3 !px-8">
             Explore the Collection

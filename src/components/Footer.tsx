@@ -43,7 +43,7 @@ export default function Footer() {
             </p>
             <p className="mt-4 text-cream/60">
               <a
-                href="https://instagram.com/juliette"
+                href="https://instagram.com/thejuliette.pk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-rose transition-colors"

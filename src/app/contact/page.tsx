@@ -27,7 +27,7 @@ export default function ContactPage() {
         <p className="label-caps text-espresso/60">Elsewhere</p>
         <p>
           <a
-            href="https://instagram.com/juliette"
+            href="https://instagram.com/thejuliette.pk"
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-4 hover:text-rose transition-colors"
