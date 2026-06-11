@@ -10,7 +10,6 @@ export const dynamic = "force-dynamic";
 const MARQUEE_ITEMS = [
   "Once Upon a Cuff",
   "Stitched by Hand · Finished with Love",
-  "Small Batches · Big Feelings",
   "Every Detail is a Love Letter",
   "Lace & Longing",
   "Wear What the Heroines Wore",
@@ -26,7 +25,7 @@ export default async function Home() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative overflow-hidden min-h-[90vh] flex flex-col items-center justify-center text-center px-5 py-24">
+      <section className="relative overflow-hidden min-h-[65vh] flex flex-col items-center justify-center text-center px-5 py-20">
         {/* Soft radial warmth behind the emblem */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -42,10 +41,10 @@ export default async function Home() {
         </p>
 
         <JulietteEmblem
-          className="fade-in mt-6 w-[340px] sm:w-[520px] lg:w-[620px] mx-auto text-espresso [animation-delay:0.08s]"
+          className="fade-in mt-4 w-[280px] sm:w-[420px] lg:w-[480px] mx-auto text-espresso [animation-delay:0.08s]"
         />
 
-        <h1 className="fade-up mt-10 text-3xl sm:text-5xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
+        <h1 className="fade-up mt-8 text-2xl sm:text-4xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
           The little details that make
           <span className="italic"> any outfit </span>
           a fairytale.
@@ -95,7 +94,7 @@ export default async function Home() {
           <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 sm:gap-x-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
           {featured.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
