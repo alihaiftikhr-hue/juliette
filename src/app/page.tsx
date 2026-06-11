@@ -15,7 +15,7 @@ const MARQUEE_ITEMS = [
   "Wear What the Heroines Wore",
   "Ships Across Pakistan",
   "The Story is in the Sleeve",
-  "Coded in Lahore · Dreamed in Lace",
+  "Coded in Dreams · Dreamed in Lace",
   "limited edition · always",
 ];
 
@@ -37,7 +37,7 @@ export default async function Home() {
         />
 
         <p className="fade-in label-caps !text-[0.55rem] text-espresso/40 tracking-[0.35em]">
-          Est · MMXXVI · Lahore
+          Est · MMXXVI · Pakistan
         </p>
 
         <JulietteEmblem
@@ -144,7 +144,7 @@ export default async function Home() {
             <p className="font-logo text-5xl text-rose" aria-hidden="true">2</p>
             <h3 className="label-caps mt-4">Made by Hand</h3>
             <p className="mt-3 text-espresso/75">
-              Cut, tied and finished in our Lahore atelier. Small
+              Cut, tied and finished in our atelier. Small
               imperfections are the signature of a human hand.
             </p>
           </div>

@@ -12,7 +12,7 @@ export default function OurStoryPage() {
   return (
     <div className="mx-auto max-w-3xl px-5 sm:px-8 pt-14 sm:pt-20">
       <div className="text-center">
-        <p className="label-caps text-espresso/60">Est · MMXXVI · Lahore</p>
+        <p className="label-caps text-espresso/60">Est · MMXXVI · Pakistan</p>
         <h1 className="mt-3 text-4xl sm:text-5xl">Our Story</h1>
         <LeafDivider className="w-44 mx-auto mt-6 text-espresso/70" />
       </div>
@@ -36,7 +36,7 @@ export default function OurStoryPage() {
           So we built an atelier around that thought. Every Juliette piece is
           detachable by design — collars that tie at the nape, cuffs that slip
           over wrists, bows on combs, ribbon by the yard. Each is cut and
-          finished by hand in Lahore, in batches small enough that we know
+          finished by hand, in batches small enough that we know
           every piece that leaves us.
         </p>
 

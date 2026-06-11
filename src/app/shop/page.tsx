@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "The Collection",
   description:
-    "Detachable lace collars, bows, ribbons, cuffs and finery — handmade in Lahore in small batches.",
+    "Detachable lace collars, bows, ribbons, cuffs and finery — handmade in small batches.",
 };
 
 export default async function ShopPage({

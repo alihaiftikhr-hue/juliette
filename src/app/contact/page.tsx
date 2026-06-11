@@ -35,7 +35,7 @@ export default function ContactPage() {
             Instagram
           </a>
           <span className="mx-3" aria-hidden="true">·</span>
-          Lahore, Pakistan
+          Pakistan
         </p>
       </div>
     </div>

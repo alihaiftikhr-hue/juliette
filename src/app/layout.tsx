@@ -50,14 +50,13 @@ export const metadata: Metadata = {
     template: "%s · Juliette",
   },
   description:
-    "Detachable lace, ribbon & finery to make any outfit prettier. Est. 2026 · Lahore.",
+    "Detachable lace, ribbon & finery to make any outfit prettier. Est. 2026 · Pakistan.",
   keywords: [
     "detachable lace",
     "ribbon",
     "collars",
     "accessories",
     "Juliette",
-    "Lahore",
     "Pakistan",
   ],
 };
