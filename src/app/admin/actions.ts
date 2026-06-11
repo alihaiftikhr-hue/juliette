@@ -1,7 +1,6 @@
 "use server";
 
-import fs from "node:fs/promises";
-import path from "node:path";
+import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { endSession, isAdmin, startSession, verifyPassword } from "@/lib/auth";
@@ -28,6 +27,12 @@ const PHOTO_EXTENSIONS: Record<string, string> = {
   "image/webp": "webp",
   "image/avif": "avif",
 };
+
+function storageClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  return createClient(url, key);
+}
 
 /* ————— Auth ————— */
 
@@ -70,14 +75,21 @@ async function savePhoto(file: File, slug: string): Promise<string> {
   const ext = PHOTO_EXTENSIONS[file.type];
   if (!ext) throw new Error("unsupported-type");
   if (file.size > MAX_PHOTO_BYTES) throw new Error("too-large");
-  const dir = path.join(process.cwd(), "public", "products");
-  await fs.mkdir(dir, { recursive: true });
+
   const filename = `${slug}-${Date.now()}.${ext}`;
-  await fs.writeFile(
-    path.join(dir, filename),
-    Buffer.from(await file.arrayBuffer())
-  );
-  return `/products/${filename}`;
+  const supabase = storageClient();
+
+  const { error } = await supabase.storage
+    .from("products")
+    .upload(filename, await file.arrayBuffer(), {
+      contentType: file.type,
+      upsert: true,
+    });
+
+  if (error) throw new Error(error.message);
+
+  const { data } = supabase.storage.from("products").getPublicUrl(filename);
+  return data.publicUrl;
 }
 
 function revalidateStore() {
@@ -91,7 +103,7 @@ export async function saveProductAction(formData: FormData) {
   await requireAdmin();
 
   const id = formData.get("id") ? Number(formData.get("id")) : undefined;
-  const existing = id != null ? getProductById(id) : undefined;
+  const existing = id != null ? await getProductById(id) : undefined;
   if (id != null && !existing) redirect("/admin?error=missing");
 
   const name = String(formData.get("name") ?? "").trim();
@@ -114,10 +126,10 @@ export async function saveProductAction(formData: FormData) {
 
   let slug = slugify(String(formData.get("slug") ?? "")) || slugify(name);
   if (!slug) redirect(`${backTo}?error=invalid`);
-  if (slugExists(slug, id)) {
+  if (await slugExists(slug, id)) {
     // Keep saves frictionless: suffix rather than reject.
     let i = 2;
-    while (slugExists(`${slug}-${i}`, id)) i++;
+    while (await slugExists(`${slug}-${i}`, id)) i++;
     slug = `${slug}-${i}`;
   }
 
@@ -152,9 +164,9 @@ export async function saveProductAction(formData: FormData) {
   };
 
   if (id != null) {
-    updateProduct(id, input);
+    await updateProduct(id, input);
   } else {
-    createProduct(input);
+    await createProduct(input);
   }
 
   revalidateStore();
@@ -164,7 +176,7 @@ export async function saveProductAction(formData: FormData) {
 export async function deleteProductAction(formData: FormData) {
   await requireAdmin();
   const id = Number(formData.get("id"));
-  if (Number.isFinite(id)) deleteProduct(id);
+  if (Number.isFinite(id)) await deleteProduct(id);
   revalidateStore();
   redirect("/admin?deleted=1");
 }
@@ -173,7 +185,7 @@ export async function adjustStockAction(formData: FormData) {
   await requireAdmin();
   const id = Number(formData.get("id"));
   const delta = Number(formData.get("delta"));
-  if (Number.isFinite(id) && Number.isFinite(delta)) adjustStock(id, delta);
+  if (Number.isFinite(id) && Number.isFinite(delta)) await adjustStock(id, delta);
   revalidateStore();
   revalidatePath("/admin");
 }

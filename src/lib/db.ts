@@ -1,15 +1,19 @@
-import fs from "node:fs";
-import path from "node:path";
-import { DatabaseSync } from "node:sqlite";
-import {
-  seedProducts,
-  type ArtKind,
-  type Product,
-  type ProductInput,
-} from "../data/products";
+import { createClient } from "@supabase/supabase-js";
+import { seedProducts, type ArtKind, type Product, type ProductInput } from "../data/products";
 
-const DB_PATH = path.join(process.cwd(), "data", "juliette.db");
+// ─── Supabase client (server-side only — uses service role key) ───────────────
+function getClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables."
+    );
+  }
+  return createClient(url, key);
+}
 
+// ─── Types ────────────────────────────────────────────────────────────────────
 type Row = {
   id: number;
   slug: string;
@@ -18,7 +22,7 @@ type Row = {
   price: number;
   blurb: string;
   description: string;
-  details: string; // JSON array
+  details: string[]; // Supabase returns JSONB as parsed JS already
   art: string;
   canvas: string;
   accent: string;
@@ -26,64 +30,6 @@ type Row = {
   image_alt: string | null;
   stock: number;
 };
-
-function openDb(): DatabaseSync {
-  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-  const db = new DatabaseSync(DB_PATH);
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS products (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      slug TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      category TEXT NOT NULL,
-      price INTEGER NOT NULL,
-      blurb TEXT NOT NULL DEFAULT '',
-      description TEXT NOT NULL DEFAULT '',
-      details TEXT NOT NULL DEFAULT '[]',
-      art TEXT NOT NULL,
-      canvas TEXT NOT NULL,
-      accent TEXT NOT NULL,
-      image_src TEXT,
-      image_alt TEXT,
-      stock INTEGER NOT NULL DEFAULT 0,
-      created_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-  `);
-
-  const { n } = db.prepare("SELECT COUNT(*) AS n FROM products").get() as { n: number };
-  if (n === 0) {
-    const insert = db.prepare(
-      `INSERT INTO products
-        (slug, name, category, price, blurb, description, details, art, canvas, accent, image_src, image_alt, stock)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    );
-    for (const p of seedProducts) {
-      insert.run(
-        p.slug,
-        p.name,
-        p.category,
-        p.price,
-        p.blurb,
-        p.description,
-        JSON.stringify(p.details),
-        p.art,
-        p.canvas,
-        p.accent,
-        p.image?.src ?? null,
-        p.image?.alt ?? null,
-        p.stock
-      );
-    }
-  }
-  return db;
-}
-
-// Survive dev-server hot reloads without re-opening handles.
-const g = globalThis as unknown as { __julietteDb?: DatabaseSync };
-function db(): DatabaseSync {
-  g.__julietteDb ??= openDb();
-  return g.__julietteDb;
-}
 
 function toProduct(row: Row): Product {
   return {
@@ -94,7 +40,7 @@ function toProduct(row: Row): Product {
     price: row.price,
     blurb: row.blurb,
     description: row.description,
-    details: JSON.parse(row.details) as string[],
+    details: Array.isArray(row.details) ? row.details : JSON.parse(row.details as unknown as string),
     art: row.art as ArtKind,
     canvas: row.canvas,
     accent: row.accent,
@@ -106,96 +52,143 @@ function toProduct(row: Row): Product {
   };
 }
 
-export function listProducts(category?: string): Product[] {
-  const rows = category
-    ? (db()
-        .prepare("SELECT * FROM products WHERE category = ? ORDER BY id")
-        .all(category) as Row[])
-    : (db().prepare("SELECT * FROM products ORDER BY id").all() as Row[]);
-  return rows.map(toProduct);
+// ─── Seed on first run ────────────────────────────────────────────────────────
+async function seedIfEmpty() {
+  const supabase = getClient();
+  const { count } = await supabase
+    .from("products")
+    .select("*", { count: "exact", head: true });
+
+  if (count === 0) {
+    const rows = seedProducts.map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      category: p.category,
+      price: p.price,
+      blurb: p.blurb,
+      description: p.description,
+      details: p.details,
+      art: p.art,
+      canvas: p.canvas,
+      accent: p.accent,
+      image_src: p.image?.src ?? null,
+      image_alt: p.image?.alt ?? null,
+      stock: p.stock,
+    }));
+    await supabase.from("products").insert(rows);
+  }
 }
 
-export function getProduct(slug: string): Product | undefined {
-  const row = db().prepare("SELECT * FROM products WHERE slug = ?").get(slug) as
-    | Row
-    | undefined;
-  return row ? toProduct(row) : undefined;
+// ─── Public API ───────────────────────────────────────────────────────────────
+export async function listProducts(category?: string): Promise<Product[]> {
+  await seedIfEmpty();
+  const supabase = getClient();
+  const query = supabase.from("products").select("*").order("id");
+  const { data, error } = category
+    ? await query.eq("category", category)
+    : await query;
+  if (error) throw new Error(error.message);
+  return (data as Row[]).map(toProduct);
 }
 
-export function getProductById(id: number): Product | undefined {
-  const row = db().prepare("SELECT * FROM products WHERE id = ?").get(id) as
-    | Row
-    | undefined;
-  return row ? toProduct(row) : undefined;
+export async function getProduct(slug: string): Promise<Product | undefined> {
+  await seedIfEmpty();
+  const supabase = getClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+  if (error) return undefined;
+  return toProduct(data as Row);
 }
 
-export function slugExists(slug: string, excludeId?: number): boolean {
-  const row =
-    excludeId != null
-      ? db()
-          .prepare("SELECT 1 AS x FROM products WHERE slug = ? AND id != ?")
-          .get(slug, excludeId)
-      : db().prepare("SELECT 1 AS x FROM products WHERE slug = ?").get(slug);
-  return row != null;
+export async function getProductById(id: number): Promise<Product | undefined> {
+  const supabase = getClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) return undefined;
+  return toProduct(data as Row);
 }
 
-export function createProduct(input: ProductInput): Product {
-  const result = db()
-    .prepare(
-      `INSERT INTO products
-        (slug, name, category, price, blurb, description, details, art, canvas, accent, image_src, image_alt, stock)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-    .run(
-      input.slug,
-      input.name,
-      input.category,
-      input.price,
-      input.blurb,
-      input.description,
-      JSON.stringify(input.details),
-      input.art,
-      input.canvas,
-      input.accent,
-      input.image?.src ?? null,
-      input.image?.alt ?? null,
-      input.stock
-    );
-  return getProductById(Number(result.lastInsertRowid))!;
+export async function slugExists(slug: string, excludeId?: number): Promise<boolean> {
+  const supabase = getClient();
+  const query = supabase.from("products").select("id").eq("slug", slug);
+  if (excludeId != null) query.neq("id", excludeId);
+  const { data } = await query;
+  return (data?.length ?? 0) > 0;
 }
 
-export function updateProduct(id: number, input: ProductInput): void {
-  db()
-    .prepare(
-      `UPDATE products SET
-        slug = ?, name = ?, category = ?, price = ?, blurb = ?, description = ?,
-        details = ?, art = ?, canvas = ?, accent = ?, image_src = ?, image_alt = ?, stock = ?
-       WHERE id = ?`
-    )
-    .run(
-      input.slug,
-      input.name,
-      input.category,
-      input.price,
-      input.blurb,
-      input.description,
-      JSON.stringify(input.details),
-      input.art,
-      input.canvas,
-      input.accent,
-      input.image?.src ?? null,
-      input.image?.alt ?? null,
-      input.stock,
-      id
-    );
+export async function createProduct(input: ProductInput): Promise<Product> {
+  const supabase = getClient();
+  const { data, error } = await supabase
+    .from("products")
+    .insert({
+      slug: input.slug,
+      name: input.name,
+      category: input.category,
+      price: input.price,
+      blurb: input.blurb,
+      description: input.description,
+      details: input.details,
+      art: input.art,
+      canvas: input.canvas,
+      accent: input.accent,
+      image_src: input.image?.src ?? null,
+      image_alt: input.image?.alt ?? null,
+      stock: input.stock,
+    })
+    .select()
+    .single();
+  if (error) throw new Error(error.message);
+  return toProduct(data as Row);
 }
 
-export function deleteProduct(id: number): void {
-  db().prepare("DELETE FROM products WHERE id = ?").run(id);
+export async function updateProduct(id: number, input: ProductInput): Promise<void> {
+  const supabase = getClient();
+  const { error } = await supabase
+    .from("products")
+    .update({
+      slug: input.slug,
+      name: input.name,
+      category: input.category,
+      price: input.price,
+      blurb: input.blurb,
+      description: input.description,
+      details: input.details,
+      art: input.art,
+      canvas: input.canvas,
+      accent: input.accent,
+      image_src: input.image?.src ?? null,
+      image_alt: input.image?.alt ?? null,
+      stock: input.stock,
+    })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
 }
 
-export function adjustStock(id: number, delta: number): void {
-  db()
-    .prepare("UPDATE products SET stock = MAX(0, stock + ?) WHERE id = ?")
-    .run(delta, id);
+export async function deleteProduct(id: number): Promise<void> {
+  const supabase = getClient();
+  const { error } = await supabase.from("products").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function adjustStock(id: number, delta: number): Promise<void> {
+  const supabase = getClient();
+  // Fetch current stock, then update (Supabase doesn't support inline arithmetic without RPC)
+  const { data, error: fetchError } = await supabase
+    .from("products")
+    .select("stock")
+    .eq("id", id)
+    .single();
+  if (fetchError) throw new Error(fetchError.message);
+  const newStock = Math.max(0, (data as { stock: number }).stock + delta);
+  const { error } = await supabase
+    .from("products")
+    .update({ stock: newStock })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
 }

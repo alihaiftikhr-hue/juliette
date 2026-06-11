@@ -19,15 +19,8 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-espresso/15">
-      {/* Announcement ribbon */}
-      <div className="bg-espresso text-cream text-center py-1.5 px-4">
-        <p className="label-caps !text-[0.6rem] opacity-90">
-          Handmade in Lahore · Cash on Delivery · Delivery charges paid in advance
-        </p>
-      </div>
-
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-12 sm:h-14">
           {/* Mobile menu button */}
           <button
             type="button"
@@ -36,7 +29,7 @@ export default function Header() {
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
           >
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.4">
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.4">
               {open ? (
                 <path d="M4 4l14 14M18 4L4 18" />
               ) : (
@@ -51,9 +44,8 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`label-caps transition-colors hover:text-rose ${
-                  pathname.startsWith(item.href) ? "text-rose" : "text-espresso"
-                }`}
+                className={`label-caps transition-colors hover:text-rose ${pathname.startsWith(item.href) ? "text-rose" : "text-espresso"
+                  }`}
               >
                 {item.label}
               </Link>
@@ -66,12 +58,12 @@ export default function Header() {
             className="text-espresso hover:text-rose transition-colors"
             aria-label="Juliette — home"
           >
-            <Wordmark className="text-4xl sm:text-[2.6rem]" />
+            <Wordmark className="text-2xl sm:text-[2rem]" />
           </Link>
 
           {/* Right side */}
           <div className="flex items-center justify-end gap-4 flex-1">
-            <span className="hidden sm:block font-tagline text-2xl text-espresso/70 select-none">
+            <span className="hidden sm:block font-tagline text-lg text-espresso/60 select-none italic">
               Wear Your Fairytale
             </span>
             {/* Cart icon */}
@@ -80,7 +72,7 @@ export default function Header() {
               aria-label={`Open cart${totalCount > 0 ? `, ${totalCount} item${totalCount !== 1 ? "s" : ""}` : ""}`}
               className="relative p-1.5 text-espresso hover:text-rose transition-colors"
             >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5h3.5l2.2 9.5h10.5l1.8-6.5H6" />
                 <circle cx="9" cy="19.5" r="1.5" fill="currentColor" stroke="none" />
                 <circle cx="17" cy="19.5" r="1.5" fill="currentColor" stroke="none" />
@@ -103,9 +95,8 @@ export default function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={`label-caps ${
-                pathname.startsWith(item.href) ? "text-rose" : "text-espresso"
-              }`}
+              className={`label-caps ${pathname.startsWith(item.href) ? "text-rose" : "text-espresso"
+                }`}
             >
               {item.label}
             </Link>

@@ -2,85 +2,67 @@ import Image from "next/image";
 import Link from "next/link";
 import { JulietteEmblem, LeafDivider } from "@/components/Logo";
 import NewsletterForm from "@/components/NewsletterForm";
-import ProductArt from "@/components/ProductArt";
 import ProductCard from "@/components/ProductCard";
-import { formatPrice } from "@/data/products";
 import { listProducts } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 const MARQUEE_ITEMS = [
-  "Handmade in Lahore",
-  "Cash on Delivery",
-  "Small Batches Only",
-  "Est. MMXXVI",
-  "Wear Your Fairytale",
-  "Cuffs & Sleeves",
-  "Bandanas & Sets",
+  "Once Upon a Cuff",
+  "Stitched by Hand · Finished with Love",
+  "Small Batches · Big Feelings",
+  "Every Detail is a Love Letter",
+  "Lace & Longing",
+  "Wear What the Heroines Wore",
   "Ships Across Pakistan",
+  "The Story is in the Sleeve",
+  "Coded in Lahore · Dreamed in Lace",
+  "limited edition · always",
 ];
 
-export default function Home() {
-  const all = listProducts();
-
-  // Hero card: prefer the large webp photo product
-  const heroProduct =
-    all.find((p) => p.image?.src.endsWith(".webp")) ??
-    all.find((p) => p.image) ??
-    all[0];
-
-  // Grid: 3 products (prefer those with images), excluding the hero
-  const gridProducts = all
-    .filter((p) => p.id !== heroProduct.id)
-    .sort((a, b) => (b.image ? 1 : 0) - (a.image ? 1 : 0))
-    .slice(0, 3);
+export default async function Home() {
+  const featured = (await listProducts()).slice(0, 4);
 
   return (
     <>
-      {/* ——— Hero: split screen ——— */}
-      <section className="min-h-[92vh] flex flex-col-reverse md:flex-row">
-        {/* Left — espresso text panel */}
-        <div className="bg-espresso text-cream flex flex-col justify-center items-center text-center px-10 md:px-14 py-16 md:py-0 md:w-[44%] flex-shrink-0">
-          <p className="label-caps opacity-45 !text-[0.58rem] tracking-[0.32em]">
-            Est · MMXXVI · Lahore
-          </p>
+      {/* ——— Hero ——— */}
+      <section className="relative overflow-hidden min-h-[90vh] flex flex-col items-center justify-center text-center px-5 py-24">
+        {/* Soft radial warmth behind the emblem */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 72% 60% at 50% 48%, rgba(201,183,154,0.18) 0%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
 
-          <JulietteEmblem
-            className="mt-7 w-44 sm:w-52 opacity-90"
-            tone="currentColor"
-          />
+        <p className="fade-in label-caps !text-[0.58rem] text-espresso/45 tracking-[0.38em]">
+          Est · MMXXVI · Lahore
+        </p>
 
-          <p className="font-tagline text-5xl sm:text-6xl mt-8 leading-[1.05]">
-            Wear Your<br />Fairytale
-          </p>
+        <JulietteEmblem
+          className="fade-in mt-6 w-[340px] sm:w-[520px] lg:w-[620px] mx-auto text-espresso [animation-delay:0.08s]"
+        />
 
-          <p className="label-caps !text-[0.6rem] mt-5 opacity-50 leading-loose max-w-[17rem]">
-            Detachable finery for everyday magic<br />
-            Handmade in Lahore · COD Available
-          </p>
+        <h1 className="fade-up mt-10 text-3xl sm:text-5xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
+          The little details that make
+          <span className="italic"> any outfit </span>
+          a fairytale.
+        </h1>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-3 w-full max-w-[260px]">
-            <Link href="/shop" className="btn btn-cream flex-1">
-              Shop Now
-            </Link>
-            <Link href="/our-story" className="btn btn-cream opacity-60 flex-1">
-              Our Story
-            </Link>
-          </div>
-        </div>
+        <p className="fade-up mt-5 max-w-lg mx-auto text-espresso/68 text-lg [animation-delay:0.36s]">
+          Detachable cuffs, sleeves, bandanas and accessories —
+          handmade in Lahore, in small batches.
+        </p>
 
-        {/* Right — product photo */}
-        <div className="relative flex-1 min-h-[65vw] md:min-h-0 overflow-hidden">
-          <Image
-            src="/products/lace_cuff.webp"
-            alt="Camille Pearl-Button Cuffs — white satin with pearl buttons and embroidered lace"
-            fill
-            preload
-            className="object-cover object-center"
-            sizes="(max-width: 768px) 100vw, 56vw"
-          />
-          {/* Blend edge into espresso panel on desktop */}
-          <div className="hidden md:block absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-espresso to-transparent" />
+        <div className="fade-up mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
+          <Link href="/shop" className="btn">
+            Explore the Collection
+          </Link>
+          <Link href="/our-story" className="btn btn-ghost">
+            Our Story
+          </Link>
         </div>
       </section>
 
@@ -93,7 +75,7 @@ export default function Home() {
           {[0, 1].map((copy) => (
             <span key={copy} className="flex items-center">
               {MARQUEE_ITEMS.map((text, i) => (
-                <span key={i} className="inline-flex items-center gap-0">
+                <span key={i} className="inline-flex items-center">
                   <span className="label-caps !text-[0.6rem] opacity-75 px-5 whitespace-nowrap">
                     {text}
                   </span>
@@ -113,58 +95,9 @@ export default function Home() {
           <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
         </div>
 
-        {/* Cinematic hero card */}
-        <Link
-          href={`/shop/${heroProduct.slug}`}
-          className="group relative block w-full aspect-[16/7] overflow-hidden mb-6"
-          aria-label={`${heroProduct.name} — ${formatPrice(heroProduct.price)}`}
-        >
-          <div className={`absolute inset-0 ${heroProduct.canvas}`}>
-            {heroProduct.image ? (
-              <Image
-                src={heroProduct.image.src}
-                alt={heroProduct.image.alt}
-                fill
-                className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
-                sizes="(max-width: 768px) 100vw, 1152px"
-              />
-            ) : (
-              <ProductArt
-                kind={heroProduct.art}
-                accent={heroProduct.accent}
-                className="w-full h-full transition-transform duration-1000 group-hover:scale-[1.04]"
-              />
-            )}
-          </div>
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-espresso/78 via-espresso/22 to-transparent" />
-          {/* Text overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center px-8 sm:px-14">
-            <p className="label-caps !text-[0.58rem] text-cream/60">
-              {heroProduct.category}
-            </p>
-            <h3 className="mt-2 text-cream text-2xl sm:text-4xl leading-tight">
-              {heroProduct.name}
-            </h3>
-            <p className="mt-2 text-cream/70 max-w-xs text-base leading-relaxed hidden sm:block">
-              {heroProduct.blurb}
-            </p>
-            <p className="mt-4 label-caps !text-[0.62rem] text-cream/80">
-              {formatPrice(heroProduct.price)}
-              {heroProduct.stock === 0 && (
-                <span className="ml-3 text-rose/80">· Sold Out</span>
-              )}
-            </p>
-            <span className="mt-5 self-start btn btn-cream !text-[0.65rem] !px-6 !py-3">
-              {heroProduct.stock === 0 ? "See Details" : "View This Piece"}
-            </span>
-          </div>
-        </Link>
-
-        {/* 3-up product grid */}
-        <div className="grid grid-cols-3 gap-5 sm:gap-8">
-          {gridProducts.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 sm:gap-x-8">
+          {featured.map((product) => (
+            <ProductCard key={product.slug} product={product} />
           ))}
         </div>
 
@@ -175,6 +108,33 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ——— Full-bleed photo strip ——— */}
+      <div className="mt-24 relative w-full aspect-[21/8] overflow-hidden">
+        <Image
+          src="/products/lace_cuff.webp"
+          alt="Camille Pearl-Button Cuffs — white satin with embroidered lace ruffles"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-espresso/70 via-espresso/20 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-center px-10 sm:px-20">
+          <p className="label-caps !text-[0.58rem] text-cream/60">Featured</p>
+          <h3 className="mt-2 text-cream text-2xl sm:text-4xl max-w-xs leading-snug">
+            Camille Pearl-Button Cuffs
+          </h3>
+          <p className="mt-2 text-cream/70 max-w-xs text-sm hidden sm:block">
+            Crisp satin, a row of pearl buttons, embroidered lace ruffles.
+          </p>
+          <Link
+            href="/shop/camille-pearl-button-cuffs"
+            className="mt-6 self-start btn btn-cream !text-[0.65rem] !px-6 !py-3"
+          >
+            View This Piece
+          </Link>
+        </div>
+      </div>
+
       {/* ——— Brand promise ——— */}
       <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-24">
         <div className="grid sm:grid-cols-3 gap-10 text-center">
@@ -183,7 +143,7 @@ export default function Home() {
             <h3 className="label-caps mt-4">Detachable by Design</h3>
             <p className="mt-3 text-espresso/75">
               Every piece ties, clips or slips on — no sewing, no alterations.
-              One collar, a dozen outfits.
+              One cuff, a dozen outfits.
             </p>
           </div>
           <div>
@@ -198,8 +158,8 @@ export default function Home() {
             <p className="font-logo text-5xl text-rose" aria-hidden="true">3</p>
             <h3 className="label-caps mt-4">Cash on Delivery</h3>
             <p className="mt-3 text-espresso/75">
-              Order with confidence — pay when it arrives at your door.
-              Delivery charges settled in advance at a flat rate.
+              Pay when it arrives at your door. Delivery charges
+              settled in advance at a flat rate.
             </p>
           </div>
         </div>

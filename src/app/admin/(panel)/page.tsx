@@ -13,7 +13,7 @@ export default async function AdminProductsPage({
   searchParams: Promise<{ saved?: string; deleted?: string }>;
 }) {
   const { saved, deleted } = await searchParams;
-  const products = listProducts();
+  const products = await listProducts();
 
   return (
     <div>
@@ -89,9 +89,8 @@ export default async function AdminProductsPage({
                       </button>
                     </form>
                     <span
-                      className={`min-w-8 text-center tabular-nums ${
-                        p.stock === 0 ? "text-rose font-semibold" : ""
-                      }`}
+                      className={`min-w-8 text-center tabular-nums ${p.stock === 0 ? "text-rose font-semibold" : ""
+                        }`}
                     >
                       {p.stock}
                     </span>

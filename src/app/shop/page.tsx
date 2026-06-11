@@ -20,7 +20,7 @@ export default async function ShopPage({
 }) {
   const { category } = await searchParams;
   const active = CATEGORIES.find((c) => c.toLowerCase() === category?.toLowerCase());
-  const shown = listProducts(active);
+  const shown = await listProducts(active);
 
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-14 sm:pt-20">
@@ -41,9 +41,8 @@ export default async function ShopPage({
       >
         <Link
           href="/shop"
-          className={`label-caps transition-colors hover:text-rose ${
-            !active ? "text-rose underline underline-offset-4" : "text-espresso/70"
-          }`}
+          className={`label-caps transition-colors hover:text-rose ${!active ? "text-rose underline underline-offset-4" : "text-espresso/70"
+            }`}
         >
           All
         </Link>
@@ -51,9 +50,8 @@ export default async function ShopPage({
           <Link
             key={c}
             href={`/shop?category=${c.toLowerCase()}`}
-            className={`label-caps transition-colors hover:text-rose ${
-              active === c ? "text-rose underline underline-offset-4" : "text-espresso/70"
-            }`}
+            className={`label-caps transition-colors hover:text-rose ${active === c ? "text-rose underline underline-offset-4" : "text-espresso/70"
+              }`}
           >
             {c}
           </Link>
