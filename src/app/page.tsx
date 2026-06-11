@@ -25,7 +25,7 @@ export default async function Home() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative overflow-hidden min-h-[50vh] flex flex-col items-center justify-center text-center px-5 py-12 sm:py-16">
+      <section className="relative overflow-hidden flex flex-col items-center justify-center text-center px-5 py-6 sm:py-10">
         {/* Soft radial warmth behind the emblem */}
         <div
           className="absolute inset-0 pointer-events-none"
