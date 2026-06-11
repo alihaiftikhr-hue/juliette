@@ -25,7 +25,7 @@ export default async function Home() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative overflow-hidden flex flex-col items-center justify-center text-center px-5 py-6 sm:py-10">
+      <section className="relative overflow-hidden min-h-[45vh] flex flex-col items-center justify-center text-center px-5 py-12 sm:py-16">
         {/* Soft radial warmth behind the emblem */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -36,7 +36,7 @@ export default async function Home() {
           aria-hidden="true"
         />
         <JulietteEmblem
-          className="fade-in w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
+          className="fade-in mt-6 w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
         />
 
         <h1 className="fade-up mt-5 text-xl sm:text-3xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
