@@ -72,14 +72,15 @@ export default async function ShopPage({
         </div>
       )}
 
-      <p className="text-center mt-16 text-espresso/60 italic">
-        Online ordering opens with the first collection. Until then, pieces can
-        be reserved{" "}
-        <Link href="/contact" className="underline underline-offset-4 hover:text-rose transition-colors">
-          through the atelier
-        </Link>
-        .
-      </p>
+      {/* COD notice */}
+      <div className="mt-16 mx-auto max-w-lg bg-kraft-soft border border-espresso/10 px-6 py-4 text-center">
+        <p className="label-caps !text-[0.6rem] text-espresso/70 leading-relaxed">
+          Cash on Delivery · Delivery charges paid in advance · Ships across Pakistan
+        </p>
+        <p className="mt-2 text-sm text-espresso/60 italic">
+          Add items to your cart and order directly via WhatsApp.
+        </p>
+      </div>
     </div>
   );
 }

@@ -136,6 +136,18 @@
     border-color: var(--color-espresso);
   }
 
+  /* Cream outline button — for use on dark (espresso) backgrounds */
+  .btn-cream {
+    background-color: transparent;
+    color: var(--color-cream);
+    border-color: var(--color-cream);
+  }
+  .btn-cream:hover {
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    border-color: var(--color-cream);
+  }
+
   .field {
     width: 100%;
     background-color: var(--color-cream);
@@ -152,7 +164,7 @@
   }
 }
 
-/* Gentle entrance animations (respect reduced-motion) */
+/* Gentle entrance animations + marquee (respect reduced-motion) */
 @layer utilities {
   .fade-up {
     opacity: 0;
@@ -169,9 +181,21 @@
   @keyframes fadeIn {
     to { opacity: 1; }
   }
+
+  /* Infinite marquee — duplicate content ×2 in JSX for seamless loop */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .fade-up, .fade-in { animation: none; opacity: 1; transform: none; }
+  .marquee-track { animation: none; }
   html { scroll-behavior: auto; }
 }

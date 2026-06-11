@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useCart } from "@/components/CartProvider";
 import { Wordmark } from "@/components/Logo";
 
 const NAV = [
@@ -14,13 +15,14 @@ const NAV = [
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { totalCount, openCart } = useCart();
 
   return (
     <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-espresso/15">
       {/* Announcement ribbon */}
       <div className="bg-espresso text-cream text-center py-1.5 px-4">
         <p className="label-caps !text-[0.6rem] opacity-90">
-          Handmade in Lahore · First collection arriving soon
+          Handmade in Lahore · Cash on Delivery · Delivery charges paid in advance
         </p>
       </div>
 
@@ -68,11 +70,27 @@ export default function Header() {
           </Link>
 
           {/* Right side */}
-          <div className="flex items-center justify-end flex-1">
+          <div className="flex items-center justify-end gap-4 flex-1">
             <span className="hidden sm:block font-tagline text-2xl text-espresso/70 select-none">
               Wear Your Fairytale
             </span>
-            <span className="sm:hidden w-[22px]" aria-hidden="true" />
+            {/* Cart icon */}
+            <button
+              onClick={openCart}
+              aria-label={`Open cart${totalCount > 0 ? `, ${totalCount} item${totalCount !== 1 ? "s" : ""}` : ""}`}
+              className="relative p-1.5 text-espresso hover:text-rose transition-colors"
+            >
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5h3.5l2.2 9.5h10.5l1.8-6.5H6" />
+                <circle cx="9" cy="19.5" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="17" cy="19.5" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+              {totalCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-rose text-cream label-caps !text-[0.5rem] rounded-full flex items-center justify-center px-0.5">
+                  {totalCount > 9 ? "9+" : totalCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </div>

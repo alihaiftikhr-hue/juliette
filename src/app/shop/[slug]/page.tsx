@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import CartButton from "@/components/CartButton";
 import { LeafDivider } from "@/components/Logo";
 import ProductArt from "@/components/ProductArt";
 import ProductCard from "@/components/ProductCard";
@@ -111,30 +112,39 @@ export default async function ProductPage({
           </ul>
 
           <div className="mt-9 flex flex-col sm:flex-row gap-4">
-            {soldOut ? (
-              <span className="btn !cursor-default opacity-45" aria-disabled="true">
-                Sold Out
-              </span>
-            ) : (
-              <Link href="/contact" className="btn">
-                Reserve This Piece
-              </Link>
-            )}
+            <CartButton
+              soldOut={soldOut}
+              item={{
+                id: product.id,
+                slug: product.slug,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+              }}
+            />
             <Link href="/shop" className="btn btn-ghost">
               Keep Browsing
             </Link>
           </div>
 
-          <p className="mt-6 text-sm text-espresso/60 italic">
-            {soldOut
-              ? "This batch has found its homes — write to the atelier to hear when it returns."
-              : "Online checkout opens with the first collection — until then, reservations are taken through the atelier."}
-          </p>
+          {/* Delivery info */}
+          <div className="mt-6 bg-kraft-soft border border-espresso/10 px-4 py-3">
+            {soldOut ? (
+              <p className="text-sm text-espresso/65 italic">
+                This batch has found its homes — write to the atelier to hear when it returns.
+              </p>
+            ) : (
+              <p className="label-caps !text-[0.58rem] text-espresso/70 leading-relaxed">
+                Cash on Delivery &nbsp;·&nbsp; Delivery charges paid in advance
+                &nbsp;·&nbsp; Ships across Pakistan
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Related */}
-      <section className="pt-24">
+      <section className="pt-24 pb-8">
         <div className="text-center mb-10">
           <p className="label-caps text-espresso/60">You may also love</p>
         </div>
