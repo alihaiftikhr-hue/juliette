@@ -36,9 +36,7 @@ export default async function Home() {
           aria-hidden="true"
         />
 
-        <p className="fade-in label-caps !text-[0.55rem] text-espresso/40 tracking-[0.35em]">
-          Est · MMXXVI · Pakistan
-        </p>
+
 
         <JulietteEmblem
           className="fade-in mt-3 w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
