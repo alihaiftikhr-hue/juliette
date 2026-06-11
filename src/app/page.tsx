@@ -35,14 +35,11 @@ export default async function Home() {
           }}
           aria-hidden="true"
         />
-
-
-
         <JulietteEmblem
-          className="fade-in mt-3 w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
+          className="fade-in w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
         />
 
-        <h1 className="fade-up mt-6 text-xl sm:text-3xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
+        <h1 className="fade-up mt-5 text-xl sm:text-3xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
           The little details that make
           <span className="italic"> any outfit </span>
           a fairytale.

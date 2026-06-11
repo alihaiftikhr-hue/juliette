@@ -12,8 +12,7 @@ export default function OurStoryPage() {
   return (
     <div className="mx-auto max-w-3xl px-5 sm:px-8 pt-14 sm:pt-20">
       <div className="text-center">
-
-        <h1 className="mt-3 text-4xl sm:text-5xl">Our Story</h1>
+        <h1 className="text-4xl sm:text-5xl">Our Story</h1>
         <LeafDivider className="w-44 mx-auto mt-6 text-espresso/70" />
       </div>
 
