@@ -25,41 +25,41 @@ export default async function Home() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative overflow-hidden min-h-[65vh] flex flex-col items-center justify-center text-center px-5 py-20">
+      <section className="relative overflow-hidden min-h-[50vh] flex flex-col items-center justify-center text-center px-5 py-12 sm:py-16">
         {/* Soft radial warmth behind the emblem */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 72% 60% at 50% 48%, rgba(201,183,154,0.18) 0%, transparent 70%)",
+              "radial-gradient(ellipse 72% 50% at 50% 45%, rgba(201,183,154,0.15) 0%, transparent 70%)",
           }}
           aria-hidden="true"
         />
 
-        <p className="fade-in label-caps !text-[0.58rem] text-espresso/45 tracking-[0.38em]">
+        <p className="fade-in label-caps !text-[0.55rem] text-espresso/40 tracking-[0.35em]">
           Est · MMXXVI · Lahore
         </p>
 
         <JulietteEmblem
-          className="fade-in mt-4 w-[280px] sm:w-[420px] lg:w-[480px] mx-auto text-espresso [animation-delay:0.08s]"
+          className="fade-in mt-3 w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
         />
 
-        <h1 className="fade-up mt-8 text-2xl sm:text-4xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
+        <h1 className="fade-up mt-6 text-xl sm:text-3xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
           The little details that make
           <span className="italic"> any outfit </span>
           a fairytale.
         </h1>
 
-        <p className="fade-up mt-5 max-w-lg mx-auto text-espresso/68 text-lg [animation-delay:0.36s]">
+        <p className="fade-up mt-4 max-w-md mx-auto text-espresso/68 text-base [animation-delay:0.36s]">
           Detachable cuffs, sleeves, bandanas and accessories —
           handmade in Lahore, in small batches.
         </p>
 
-        <div className="fade-up mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
-          <Link href="/shop" className="btn">
+        <div className="fade-up mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
+          <Link href="/shop" className="btn !py-3 !px-8">
             Explore the Collection
           </Link>
-          <Link href="/our-story" className="btn btn-ghost">
+          <Link href="/our-story" className="btn btn-ghost !py-3 !px-8">
             Our Story
           </Link>
         </div>
