@@ -38,40 +38,37 @@ export default async function Home() {
           priority
           aria-hidden="true"
         />
-        {/* Cream gradient — heavy at top/bottom, lets photo breathe in the middle */}
+        {/* Heavy espresso veil — unified, calm, luxe */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(245,239,226,0.88) 0%, rgba(245,239,226,0.52) 35%, rgba(245,239,226,0.52) 65%, rgba(245,239,226,0.97) 100%)",
-          }}
+          style={{ background: "rgba(67,52,42,0.62)" }}
           aria-hidden="true"
         />
-        {/* Soft radial warmth behind the emblem */}
+        {/* Radial readability anchor — softens the exact centre behind logo + headline */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 72% 50% at 50% 45%, rgba(201,183,154,0.12) 0%, transparent 70%)",
+              "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(33,26,24,0.35) 0%, transparent 72%)",
           }}
           aria-hidden="true"
         />
 
         <JulietteEmblem
-          className="fade-in relative z-10 mt-4 w-[200px] sm:w-[280px] lg:w-[340px] mx-auto text-espresso [animation-delay:0.08s]"
+          className="fade-in relative z-10 mt-4 w-[200px] sm:w-[280px] lg:w-[340px] mx-auto text-cream [animation-delay:0.08s]"
         />
 
-        <h1 className="fade-up relative z-10 mt-4 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
+        <h1 className="fade-up relative z-10 mt-4 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug text-cream [animation-delay:0.22s]">
           The little details that make
-          <span className="italic text-rose"> any outfit </span>
+          <span className="italic"> any outfit </span>
           a fairytale.
         </h1>
 
         <div className="fade-up relative z-10 mt-7 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
-          <Link href="/shop" className="btn !py-3 !px-8">
+          <Link href="/shop" className="btn btn-cream !py-3 !px-8">
             Explore the Collection
           </Link>
-          <Link href="/our-story" className="btn btn-ghost !py-3 !px-8">
+          <Link href="/our-story" className="btn btn-cream !py-3 !px-8 !bg-transparent">
             Our Story
           </Link>
         </div>
