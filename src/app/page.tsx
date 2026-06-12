@@ -54,21 +54,35 @@ export default async function Home() {
           aria-hidden="true"
         />
 
-        <JulietteEmblem
-          className="fade-in relative z-10 mt-4 w-[200px] sm:w-[280px] lg:w-[340px] mx-auto text-cream [animation-delay:0.08s]"
-        />
+        <div
+          className="fade-in relative z-10 mt-4 [animation-delay:0.08s]"
+          style={{ filter: "drop-shadow(0 2px 16px rgba(0,0,0,0.45))" }}
+        >
+          <JulietteEmblem className="w-[200px] sm:w-[280px] lg:w-[340px] mx-auto text-cream" />
+        </div>
 
-        <h1 className="fade-up relative z-10 mt-4 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug text-cream [animation-delay:0.22s]">
+        <h1
+          className="fade-up relative z-10 mt-4 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug text-cream [animation-delay:0.22s]"
+          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.55)" }}
+        >
           The little details that make
           <span className="italic"> any outfit </span>
           a fairytale.
         </h1>
 
-        <div className="fade-up relative z-10 mt-7 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
-          <Link href="/shop" className="btn btn-cream !py-3 !px-8">
+        {/* Understated text-link CTAs — don't compete with logo or headline */}
+        <div className="fade-up relative z-10 mt-8 flex items-center justify-center gap-8 [animation-delay:0.5s]">
+          <Link
+            href="/shop"
+            className="label-caps !text-[0.62rem] text-cream/90 border-b border-cream/45 pb-px hover:text-cream hover:border-cream transition-colors"
+          >
             Explore the Collection
           </Link>
-          <Link href="/our-story" className="btn btn-cream !py-3 !px-8 !bg-transparent">
+          <span className="text-cream/25 text-xs select-none">·</span>
+          <Link
+            href="/our-story"
+            className="label-caps !text-[0.62rem] text-cream/55 hover:text-cream/90 transition-colors"
+          >
             Our Story
           </Link>
         </div>
