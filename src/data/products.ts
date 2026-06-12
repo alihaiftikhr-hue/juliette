@@ -4,7 +4,8 @@ export type ProductInput = {
   slug: string;
   name: string;
   category: string;
-  price: number; // PKR
+  price: number; // PKR (Base price for Pakistan)
+  price_intl: number; // PKR (Price for out of country users)
   blurb: string;
   description: string;
   details: string[];
@@ -61,6 +62,7 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-cream-deep",
     accent: "#8a9a7b",
     stock: 12,
+    price_intl: 9800, // Approx $35
   },
   {
     slug: "wren-velvet-bow",
@@ -80,6 +82,7 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-rose-soft",
     accent: "#43342a",
     stock: 20,
+    price_intl: 4200, // Approx $15
   },
   {
     slug: "fable-ribbon-set",
@@ -99,6 +102,7 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-kraft-soft",
     accent: "#c9a6a0",
     stock: 25,
+    price_intl: 3500, // Approx $12.5
   },
   {
     slug: "elowen-lace-cuffs",
@@ -122,6 +126,7 @@ export const seedProducts: ProductInput[] = [
       alt: "Elowen embroidered lace cuff flaring over the wrist",
     },
     stock: 10,
+    price_intl: 7000, // Approx $25
   },
   {
     slug: "camille-pearl-button-cuffs",
@@ -145,6 +150,7 @@ export const seedProducts: ProductInput[] = [
       alt: "Pair of Camille white satin cuffs with pearl buttons and embroidered lace ruffles",
     },
     stock: 8,
+    price_intl: 11000, // Approx $39
   },
   {
     slug: "marguerite-ribbon-brooch",
@@ -164,6 +170,7 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-kraft-soft",
     accent: "#8a9a7b",
     stock: 9,
+    price_intl: 5600, // Approx $20
   },
   {
     slug: "isolde-floral-bandana",
@@ -183,6 +190,7 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-rose-soft",
     accent: "#8a9a7b",
     stock: 6,
+    price_intl: 7000, // Approx $25
   },
   {
     slug: "noor-pearl-collar",
@@ -202,6 +210,7 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-kraft-soft",
     accent: "#c9a6a0",
     stock: 30,
+    price_intl: 12000, // Approx $42
   },
   {
     slug: "briar-hair-ribbon",
@@ -221,9 +230,21 @@ export const seedProducts: ProductInput[] = [
     canvas: "bg-cream-deep",
     accent: "#c9a6a0",
     stock: 14,
+    price_intl: 2800, // Approx $10
   },
 ];
 
-export function formatPrice(price: number): string {
-  return `Rs ${price.toLocaleString("en-PK")}`;
+export function formatPrice(price: number, countryCode: string = "PK"): string {
+  // If user is from Pakistan, show PKR
+  if (countryCode === "PK") {
+    return `Rs ${price.toLocaleString("en-PK")}`;
+  }
+
+  // Otherwise, convert PKR to USD for international display
+  // Using an approx conversion rate (e.g. 280 PKR = 1 USD)
+  const PKR_TO_USD = 280;
+  const usdPrice = price / PKR_TO_USD;
+
+  // Format as USD (e.g. $25.00)
+  return `$${usdPrice.toFixed(2)}`;
 }

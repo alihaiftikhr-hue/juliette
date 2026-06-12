@@ -56,7 +56,7 @@ export default function ProductForm({
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div>
           <label htmlFor="p-category" className="label-caps block mb-2">
             Category *
@@ -73,7 +73,7 @@ export default function ProductForm({
           </select>
         </div>
         <div>
-          <label htmlFor="p-price" className="label-caps block mb-2">
+          <label htmlFor="p-price" className="label-caps block mb-2 whitespace-nowrap">
             Price (Rs) *
           </label>
           <input
@@ -83,6 +83,19 @@ export default function ProductForm({
             min={0}
             required
             defaultValue={product?.price}
+            className="field"
+          />
+        </div>
+        <div>
+          <label htmlFor="p-price-intl" className="label-caps block mb-2 whitespace-nowrap">
+            Price Intl (Rs)
+          </label>
+          <input
+            id="p-price-intl"
+            name="price_intl"
+            type="number"
+            min={0}
+            defaultValue={product?.price_intl ?? product?.price}
             className="field"
           />
         </div>

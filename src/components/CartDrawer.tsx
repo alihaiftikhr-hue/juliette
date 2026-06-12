@@ -5,14 +5,14 @@ import { useCart } from "@/components/CartProvider";
 import { formatPrice } from "@/data/products";
 import type { CartItem } from "@/lib/cart";
 
-function buildWAUrl(items: CartItem[], total: number): string {
+function buildWAUrl(items: CartItem[], total: number, countryCode: string): string {
   const lines = items
-    .map((i) => `• ${i.name} ×${i.quantity}  —  ${formatPrice(i.price * i.quantity)}`)
+    .map((i) => `• ${i.name} ×${i.quantity}  —  ${formatPrice(i.price * i.quantity, countryCode)}`)
     .join("\n");
   const msg = [
     "Hi Juliette! I'd like to place an order:\n",
     lines,
-    `\nSubtotal: ${formatPrice(total)}`,
+    `\nSubtotal: ${formatPrice(total, countryCode)}`,
     "Please confirm my order and shipping details. Thank you!",
   ].join("\n");
   const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "923001234567";
@@ -20,7 +20,7 @@ function buildWAUrl(items: CartItem[], total: number): string {
 }
 
 export default function CartDrawer() {
-  const { items, open, closeCart, removeItem, setQty, totalCount, totalPrice, clearCart } =
+  const { items, open, closeCart, removeItem, setQty, totalCount, totalPrice, clearCart, countryCode } =
     useCart();
 
   if (!open) return null;
@@ -89,7 +89,7 @@ export default function CartDrawer() {
                 <div className="flex-1 min-w-0">
                   <p className="font-serif text-base leading-snug">{item.name}</p>
                   <p className="label-caps !text-[0.6rem] mt-1 text-espresso/60">
-                    {formatPrice(item.price)} each
+                    {formatPrice(item.price, countryCode)} each
                   </p>
                   <div className="flex items-center gap-2 mt-3">
                     <button
@@ -123,7 +123,7 @@ export default function CartDrawer() {
 
                 {/* Line total */}
                 <p className="label-caps !text-[0.65rem] text-espresso/75 self-start flex-shrink-0">
-                  {formatPrice(item.price * item.quantity)}
+                  {formatPrice(item.price * item.quantity, countryCode)}
                 </p>
               </div>
             ))
@@ -136,7 +136,7 @@ export default function CartDrawer() {
             {/* Subtotal row */}
             <div className="flex justify-between items-center">
               <span className="label-caps">Subtotal</span>
-              <span className="label-caps">{formatPrice(totalPrice)}</span>
+              <span className="label-caps">{formatPrice(totalPrice, countryCode)}</span>
             </div>
 
             {/* COD notice */}
@@ -149,7 +149,7 @@ export default function CartDrawer() {
 
             {/* WhatsApp order button */}
             <a
-              href={buildWAUrl(items, totalPrice)}
+              href={buildWAUrl(items, totalPrice, countryCode)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeCart}

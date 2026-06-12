@@ -20,6 +20,7 @@ type Row = {
   name: string;
   category: string;
   price: number;
+  price_intl: number;
   blurb: string;
   description: string;
   details: string[]; // Supabase returns JSONB as parsed JS already
@@ -38,6 +39,7 @@ function toProduct(row: Row): Product {
     name: row.name,
     category: row.category,
     price: row.price,
+    price_intl: row.price_intl ?? row.price, // Fallback to local price if intl is null
     blurb: row.blurb,
     description: row.description,
     details: Array.isArray(row.details) ? row.details : JSON.parse(row.details as unknown as string),
@@ -65,6 +67,7 @@ async function seedIfEmpty() {
       name: p.name,
       category: p.category,
       price: p.price,
+      price_intl: p.price_intl,
       blurb: p.blurb,
       description: p.description,
       details: p.details,
@@ -131,6 +134,7 @@ export async function createProduct(input: ProductInput): Promise<Product> {
       name: input.name,
       category: input.category,
       price: input.price,
+      price_intl: input.price_intl,
       blurb: input.blurb,
       description: input.description,
       details: input.details,
@@ -156,6 +160,7 @@ export async function updateProduct(id: number, input: ProductInput): Promise<vo
       name: input.name,
       category: input.category,
       price: input.price,
+      price_intl: input.price_intl,
       blurb: input.blurb,
       description: input.description,
       details: input.details,

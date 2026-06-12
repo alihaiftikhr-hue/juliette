@@ -53,6 +53,7 @@ function reducer(s: State, a: Action): State {
 type Ctx = {
   items: CartItem[];
   open: boolean;
+  countryCode: string;
   addItem: (item: Omit<CartItem, "quantity">) => void;
   removeItem: (id: number) => void;
   setQty: (id: number, qty: number) => void;
@@ -71,14 +72,20 @@ export function useCart(): Ctx {
   return ctx;
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({
+  children,
+  countryCode = "PK",
+}: {
+  children: ReactNode;
+  countryCode?: string;
+}) {
   const [state, dispatch] = useReducer(reducer, { items: [], open: false });
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem("juliette-cart");
       if (raw) dispatch({ type: "HYDRATE", items: JSON.parse(raw) });
-    } catch {}
+    } catch { }
   }, []);
 
   useEffect(() => {
@@ -93,6 +100,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       value={{
         items: state.items,
         open: state.open,
+        countryCode,
         addItem: (payload) => dispatch({ type: "ADD", payload }),
         removeItem: (id) => dispatch({ type: "REMOVE", id }),
         setQty: (id, qty) => dispatch({ type: "SET_QTY", id, qty }),

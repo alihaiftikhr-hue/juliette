@@ -4,6 +4,7 @@ import { LeafDivider } from "@/components/Logo";
 import ProductCard from "@/components/ProductCard";
 import { CATEGORIES } from "@/data/products";
 import { listProducts } from "@/lib/db";
+import { getVisitorCountry } from "@/lib/geo";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function ShopPage({
   const { category } = await searchParams;
   const active = CATEGORIES.find((c) => c.toLowerCase() === category?.toLowerCase());
   const shown = await listProducts(active);
+  const country = await getVisitorCountry();
 
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-14 sm:pt-20">
@@ -65,7 +67,7 @@ export default async function ShopPage({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
           {shown.map((product) => (
-            <ProductCard key={product.slug} product={product} />
+            <ProductCard key={product.slug} product={product} countryCode={country} />
           ))}
         </div>
       )}

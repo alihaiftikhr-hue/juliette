@@ -3,12 +3,20 @@ import Link from "next/link";
 import ProductArt from "@/components/ProductArt";
 import { formatPrice, type Product } from "@/data/products";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  countryCode = "PK",
+}: {
+  product: Product;
+  countryCode?: string;
+}) {
+  const displayPrice = countryCode === "PK" ? product.price : product.price_intl;
+
   return (
     <Link
       href={`/shop/${product.slug}`}
       className="group block"
-      aria-label={`${product.name} — ${formatPrice(product.price)}`}
+      aria-label={`${product.name} — ${formatPrice(displayPrice, countryCode)}`}
     >
       <div
         className={`${product.canvas} relative overflow-hidden aspect-square border border-espresso/10 transition-all duration-500 group-hover:border-espresso/30 group-hover:shadow-xl group-hover:shadow-espresso/5`}
@@ -40,8 +48,8 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <span
           className={`label-caps !text-[0.55rem] absolute top-4 left-4 z-10 ${product.image
-              ? "bg-cream/90 backdrop-blur-sm px-2.5 py-1 text-espresso/80 shadow-sm"
-              : "text-espresso/55"
+            ? "bg-cream/90 backdrop-blur-sm px-2.5 py-1 text-espresso/80 shadow-sm"
+            : "text-espresso/55"
             }`}
         >
           {product.category}
@@ -58,7 +66,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.name}
         </h3>
         <p className="label-caps !text-[0.7rem] mt-2 text-espresso/70 tracking-widest">
-          {formatPrice(product.price)}
+          {formatPrice(displayPrice, countryCode)}
         </p>
       </div>
     </Link>

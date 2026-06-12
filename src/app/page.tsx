@@ -4,6 +4,7 @@ import { JulietteEmblem, LeafDivider } from "@/components/Logo";
 import NewsletterForm from "@/components/NewsletterForm";
 import ProductCard from "@/components/ProductCard";
 import { listProducts } from "@/lib/db";
+import { getVisitorCountry } from "@/lib/geo";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ const MARQUEE_ITEMS = [
 
 export default async function Home() {
   const featured = (await listProducts()).slice(0, 4);
+  const country = await getVisitorCountry();
 
   return (
     <>
@@ -86,7 +88,7 @@ export default async function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
           {featured.map((product) => (
-            <ProductCard key={product.slug} product={product} />
+            <ProductCard key={product.slug} product={product} countryCode={country} />
           ))}
         </div>
 

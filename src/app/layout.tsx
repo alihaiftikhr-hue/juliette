@@ -11,6 +11,7 @@ import CartDrawer from "@/components/CartDrawer";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { CartProvider } from "@/components/CartProvider";
+import { getVisitorCountry } from "@/lib/geo";
 
 const allura = Allura({
   variable: "--font-allura",
@@ -61,11 +62,13 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const country = await getVisitorCountry();
+
   return (
     <html
       lang="en"
@@ -73,7 +76,7 @@ export default function RootLayout({
       className={`${allura.variable} ${italianno.variable} ${cinzel.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CartProvider>
+        <CartProvider countryCode={country}>
           <Header />
           <CartDrawer />
           <main className="flex-1">{children}</main>

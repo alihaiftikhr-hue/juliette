@@ -8,6 +8,7 @@ import ProductArt from "@/components/ProductArt";
 import ProductCard from "@/components/ProductCard";
 import { formatPrice } from "@/data/products";
 import { getProduct, listProducts } from "@/lib/db";
+import { getVisitorCountry } from "@/lib/geo";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function ProductPage({
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
+  const country = await getVisitorCountry();
 
   const all = await listProducts();
   const related = all
@@ -88,7 +90,7 @@ export default async function ProductPage({
           <p className="label-caps text-espresso/60">{product.category}</p>
           <h1 className="mt-2 text-4xl sm:text-5xl">{product.name}</h1>
           <p className="label-caps mt-4 text-espresso/80">
-            {formatPrice(product.price)}
+            {formatPrice(country === "PK" ? product.price : product.price_intl, country)}
             {soldOut ? (
               <span className="ml-3 text-rose">· Sold Out</span>
             ) : (
@@ -118,7 +120,7 @@ export default async function ProductPage({
                 id: product.id,
                 slug: product.slug,
                 name: product.name,
-                price: product.price,
+                price: country === "PK" ? product.price : product.price_intl,
                 image: product.image,
               }}
             />
@@ -150,7 +152,7 @@ export default async function ProductPage({
         </div>
         <div className="grid grid-cols-3 gap-x-5 sm:gap-x-8 gap-y-10">
           {related.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+            <ProductCard key={p.slug} product={p} countryCode={country} />
           ))}
         </div>
       </section>

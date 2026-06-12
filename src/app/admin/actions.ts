@@ -109,6 +109,7 @@ export async function saveProductAction(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   const category = String(formData.get("category") ?? "");
   const price = Math.max(0, Math.round(Number(formData.get("price") ?? 0)));
+  const price_intl = Math.max(0, Math.round(Number(formData.get("price_intl") ?? price)));
   const stock = Math.max(0, Math.round(Number(formData.get("stock") ?? 0)));
   const blurb = String(formData.get("blurb") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -161,6 +162,7 @@ export async function saveProductAction(formData: FormData) {
     canvas: existing?.canvas ?? CARD_CANVASES[hashIndex(slug, CARD_CANVASES.length)],
     accent: existing?.accent ?? CARD_ACCENTS[hashIndex(name, CARD_ACCENTS.length)],
     image,
+    price_intl,
   };
 
   if (id != null) {
