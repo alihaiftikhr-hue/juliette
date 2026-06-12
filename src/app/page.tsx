@@ -3,6 +3,7 @@ import Link from "next/link";
 import { JulietteEmblem, LeafDivider } from "@/components/Logo";
 import NewsletterForm from "@/components/NewsletterForm";
 import ProductCard from "@/components/ProductCard";
+import RevealOnScroll from "@/components/RevealOnScroll";
 import { listProducts } from "@/lib/db";
 import { getVisitorCountry } from "@/lib/geo";
 
@@ -27,27 +28,46 @@ export default async function Home() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative overflow-hidden min-h-[45vh] flex flex-col items-center justify-center text-center px-5 py-12 sm:py-16">
+      <section className="relative overflow-hidden min-h-[70vh] flex flex-col items-center justify-center text-center px-5 py-16">
+        {/* Background editorial photo */}
+        <Image
+          src="/products/lace.jpg"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+          aria-hidden="true"
+        />
+        {/* Cream gradient — heavy at top/bottom, lets photo breathe in the middle */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(245,239,226,0.88) 0%, rgba(245,239,226,0.52) 35%, rgba(245,239,226,0.52) 65%, rgba(245,239,226,0.97) 100%)",
+          }}
+          aria-hidden="true"
+        />
         {/* Soft radial warmth behind the emblem */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 72% 50% at 50% 45%, rgba(201,183,154,0.15) 0%, transparent 70%)",
+              "radial-gradient(ellipse 72% 50% at 50% 45%, rgba(201,183,154,0.12) 0%, transparent 70%)",
           }}
           aria-hidden="true"
         />
+
         <JulietteEmblem
-          className="fade-in mt-6 w-[220px] sm:w-[320px] lg:w-[380px] mx-auto text-espresso [animation-delay:0.08s]"
+          className="fade-in relative z-10 mt-4 w-[200px] sm:w-[280px] lg:w-[340px] mx-auto text-espresso [animation-delay:0.08s]"
         />
 
-        <h1 className="fade-up mt-5 text-xl sm:text-3xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
+        <h1 className="fade-up relative z-10 mt-4 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug [animation-delay:0.22s]">
           The little details that make
-          <span className="italic"> any outfit </span>
+          <span className="italic text-rose"> any outfit </span>
           a fairytale.
         </h1>
 
-        <div className="fade-up mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
+        <div className="fade-up relative z-10 mt-7 flex flex-col sm:flex-row items-center justify-center gap-4 [animation-delay:0.5s]">
           <Link href="/shop" className="btn !py-3 !px-8">
             Explore the Collection
           </Link>
@@ -70,7 +90,7 @@ export default async function Home() {
                   <span className="label-caps !text-[0.6rem] opacity-75 px-5 whitespace-nowrap">
                     {text}
                   </span>
-                  <span className="text-cream/25 text-[0.5rem]">✦</span>
+                  <span className="text-rose/60 text-[0.6rem]">✿</span>
                 </span>
               ))}
             </span>
@@ -79,25 +99,27 @@ export default async function Home() {
       </div>
 
       {/* ——— Featured collection ——— */}
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-20">
-        <div className="text-center mb-12">
-          <p className="label-caps text-espresso/60">The Collection</p>
-          <h2 className="mt-3 text-3xl sm:text-4xl">A first look at the finery</h2>
-          <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
-        </div>
+      <RevealOnScroll>
+        <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-20">
+          <div className="text-center mb-12">
+            <p className="label-caps text-espresso/60">The Collection</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">A first look at the finery</h2>
+            <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-          {featured.map((product) => (
-            <ProductCard key={product.slug} product={product} countryCode={country} />
-          ))}
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            {featured.map((product) => (
+              <ProductCard key={product.slug} product={product} countryCode={country} />
+            ))}
+          </div>
 
-        <div className="text-center mt-12">
-          <Link href="/shop" className="btn btn-ghost">
-            View Everything
-          </Link>
-        </div>
-      </section>
+          <div className="text-center mt-12">
+            <Link href="/shop" className="btn btn-ghost">
+              View Everything
+            </Link>
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* ——— Full-bleed photo strip ——— */}
       <div className="mt-24 relative w-full aspect-[21/8] overflow-hidden">
@@ -127,62 +149,68 @@ export default async function Home() {
       </div>
 
       {/* ——— Brand promise ——— */}
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-24">
-        <div className="grid sm:grid-cols-3 gap-10 text-center">
-          <div>
-            <p className="font-logo text-5xl text-rose" aria-hidden="true">1</p>
-            <h3 className="label-caps mt-4">Detachable by Design</h3>
-            <p className="mt-3 text-espresso/75">
-              Every piece ties, clips or slips on — no sewing, no alterations.
-              One cuff, a dozen outfits.
-            </p>
+      <RevealOnScroll>
+        <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-24">
+          <div className="grid sm:grid-cols-3 gap-10 text-center">
+            <div>
+              <p className="font-logo text-5xl text-rose" aria-hidden="true">1</p>
+              <h3 className="label-caps mt-4">Detachable by Design</h3>
+              <p className="mt-3 text-espresso/75">
+                Every piece ties, clips or slips on — no sewing, no alterations.
+                One cuff, a dozen outfits.
+              </p>
+            </div>
+            <div>
+              <p className="font-logo text-5xl text-rose" aria-hidden="true">2</p>
+              <h3 className="label-caps mt-4">Made by Hand</h3>
+              <p className="mt-3 text-espresso/75">
+                Cut, tied and finished in our atelier. Small
+                imperfections are the signature of a human hand.
+              </p>
+            </div>
+            <div>
+              <p className="font-logo text-5xl text-rose" aria-hidden="true">3</p>
+              <h3 className="label-caps mt-4">Secure Shipping</h3>
+              <p className="mt-3 text-espresso/75">
+                Secure global payments & flat-rate international shipping.
+                Tracked and delivered to your doorstep, anywhere.
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="font-logo text-5xl text-rose" aria-hidden="true">2</p>
-            <h3 className="label-caps mt-4">Made by Hand</h3>
-            <p className="mt-3 text-espresso/75">
-              Cut, tied and finished in our atelier. Small
-              imperfections are the signature of a human hand.
-            </p>
-          </div>
-          <div>
-            <p className="font-logo text-5xl text-rose" aria-hidden="true">3</p>
-            <h3 className="label-caps mt-4">Secure Shipping</h3>
-            <p className="mt-3 text-espresso/75">
-              Secure global payments & flat-rate international shipping.
-              Tracked and delivered to your doorstep, anywhere.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
+      </RevealOnScroll>
 
       {/* ——— Story teaser ——— */}
-      <section className="mt-24 bg-kraft-soft border-y border-espresso/10">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 py-20 text-center">
-          <p className="label-caps text-espresso/60">Our Story</p>
-          <p className="font-tagline text-4xl sm:text-6xl mt-6 leading-snug text-espresso">
-            &ldquo;We believe every wardrobe already holds a fairytale —
-            it just needs a little lace to find it.&rdquo;
-          </p>
-          <LeafDivider className="w-44 mx-auto mt-8 text-espresso/70" />
-          <Link href="/our-story" className="btn mt-10">
-            Read the Story
-          </Link>
-        </div>
-      </section>
+      <RevealOnScroll>
+        <section className="mt-24 bg-kraft-soft border-y border-espresso/10">
+          <div className="mx-auto max-w-3xl px-5 sm:px-8 py-20 text-center">
+            <p className="label-caps text-espresso/60">Our Story</p>
+            <p className="font-tagline text-4xl sm:text-6xl mt-6 leading-snug text-espresso">
+              &ldquo;We believe every wardrobe already holds a fairytale —
+              it just needs a little lace to find it.&rdquo;
+            </p>
+            <LeafDivider className="w-44 mx-auto mt-8 text-espresso/70" />
+            <Link href="/our-story" className="btn mt-10">
+              Read the Story
+            </Link>
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* ——— Newsletter ——— */}
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-24 pb-8 text-center">
-        <p className="label-caps text-espresso/60">The Guest List</p>
-        <h2 className="mt-3 text-3xl sm:text-4xl">Be first through the gates</h2>
-        <p className="mt-4 max-w-lg mx-auto text-espresso/75">
-          Join the list for new arrivals, behind-the-scenes moments, and the
-          occasional beautifully written letter.
-        </p>
-        <div className="mt-8">
-          <NewsletterForm />
-        </div>
-      </section>
+      <RevealOnScroll>
+        <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-24 pb-8 text-center">
+          <p className="label-caps text-espresso/60">The Guest List</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl">Be first through the gates</h2>
+          <p className="mt-4 max-w-lg mx-auto text-espresso/75">
+            Join the list for new arrivals, behind-the-scenes moments, and the
+            occasional beautifully written letter.
+          </p>
+          <div className="mt-8">
+            <NewsletterForm />
+          </div>
+        </section>
+      </RevealOnScroll>
     </>
   );
 }

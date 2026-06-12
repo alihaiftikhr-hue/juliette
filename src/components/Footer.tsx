@@ -4,13 +4,24 @@ import { JulietteEmblem } from "@/components/Logo";
 export default function Footer() {
   return (
     <footer className="bg-ink text-cream mt-24">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-16">
-        <div className="grid gap-12 sm:grid-cols-[1.2fr_1fr_1fr] items-start">
-          {/* Emblem */}
-          <div className="max-w-[280px]">
-            <JulietteEmblem className="w-full text-cream" />
-          </div>
+      {/* Brand close — centred monogram + tagline */}
+      <div className="text-center pt-16 pb-12 px-5 border-b border-cream/10">
+        <JulietteEmblem className="w-36 sm:w-44 mx-auto text-cream/50" />
+        <p className="font-tagline text-3xl sm:text-4xl text-cream/60 mt-4 leading-snug">
+          Wear Your Fairytale
+        </p>
+        <a
+          href="https://instagram.com/thejuliette.pk"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="label-caps !text-[0.6rem] text-cream/35 hover:text-rose transition-colors mt-3 inline-block tracking-widest"
+        >
+          @thejuliette.pk
+        </a>
+      </div>
 
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-14">
+        <div className="grid gap-12 sm:grid-cols-2 max-w-lg mx-auto sm:max-w-none">
           {/* Explore */}
           <div>
             <h3 className="label-caps text-kraft mb-5">Explore</h3>
