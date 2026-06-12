@@ -13,7 +13,7 @@ const MARQUEE_ITEMS = [
   "Every Detail is a Love Letter",
   "Lace & Longing",
   "Wear What the Heroines Wore",
-  "Ships Across Pakistan",
+  "Worldwide Shipping",
   "The Story is in the Sleeve",
   "Coded in Dreams · Dreamed in Lace",
   "limited edition · always",
@@ -145,10 +145,10 @@ export default async function Home() {
           </div>
           <div>
             <p className="font-logo text-5xl text-rose" aria-hidden="true">3</p>
-            <h3 className="label-caps mt-4">Cash on Delivery</h3>
+            <h3 className="label-caps mt-4">Secure Shipping</h3>
             <p className="mt-3 text-espresso/75">
-              Pay when it arrives at your door. Delivery charges
-              settled in advance at a flat rate.
+              Secure global payments & flat-rate international shipping.
+              Tracked and delivered to your doorstep, anywhere.
             </p>
           </div>
         </div>

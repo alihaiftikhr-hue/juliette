@@ -135,8 +135,8 @@ export default async function ProductPage({
               </p>
             ) : (
               <p className="label-caps !text-[0.58rem] text-espresso/70 leading-relaxed">
-                Cash on Delivery &nbsp;·&nbsp; Delivery charges paid in advance
-                &nbsp;·&nbsp; Ships across Pakistan
+                Worldwide Shipping &nbsp;·&nbsp; Secure Payments
+                &nbsp;·&nbsp; Hand-finished in our atelier
               </p>
             )}
           </div>

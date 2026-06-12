@@ -70,13 +70,13 @@ export default async function ShopPage({
         </div>
       )}
 
-      {/* COD notice */}
+      {/* Shipping notice */}
       <div className="mt-16 mx-auto max-w-lg bg-kraft-soft border border-espresso/10 px-6 py-4 text-center">
         <p className="label-caps !text-[0.6rem] text-espresso/70 leading-relaxed">
-          Cash on Delivery · Delivery charges paid in advance · Ships across Pakistan
+          Worldwide Shipping · Secure Payments · Delivered with Care
         </p>
         <p className="mt-2 text-sm text-espresso/60 italic">
-          Add items to your cart and order directly via WhatsApp.
+          To order, simply add to cart and message us on WhatsApp.
         </p>
       </div>
     </div>

@@ -13,8 +13,7 @@ function buildWAUrl(items: CartItem[], total: number): string {
     "Hi Juliette! I'd like to place an order:\n",
     lines,
     `\nSubtotal: ${formatPrice(total)}`,
-    "(+ delivery charges paid in advance)\n",
-    "Please confirm my order. Thank you!",
+    "Please confirm my order and shipping details. Thank you!",
   ].join("\n");
   const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "923001234567";
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
@@ -143,8 +142,8 @@ export default function CartDrawer() {
             {/* COD notice */}
             <div className="bg-kraft-soft border border-espresso/12 px-4 py-3">
               <p className="label-caps !text-[0.58rem] text-espresso/75 leading-relaxed">
-                Cash on Delivery &nbsp;·&nbsp; Delivery charges paid in advance
-                &nbsp;·&nbsp; Ships across Pakistan
+                Worldwide Shipping &nbsp;·&nbsp; Secure Payments
+                &nbsp;·&nbsp; Hand-finished in our atelier
               </p>
             </div>
 
