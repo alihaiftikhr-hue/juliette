@@ -289,7 +289,7 @@ export default async function Home() {
               {
                 quote:
                   "I wore the Camille cuffs to a wedding and felt like I’d stepped out of a painting. The quality is so much better than I expected.",
-                name: "Sofia R.",
+                name: "Elsa R.",
                 place: "London",
               },
               {
