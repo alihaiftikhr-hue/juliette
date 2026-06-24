@@ -33,10 +33,10 @@ export const CATEGORIES = [
 /** Default illustration per category, for products without photos yet. */
 export const CATEGORY_ART: Record<string, ArtKind> = {
   Cuffs: "cuff",
-  Sleeves: "cuff",
+  Sleeves: "collar",
   Bandanas: "bandana",
   Sets: "ribbon",
-  Accessories: "collar",
+  Accessories: "brooch",
 };
 
 export const CARD_CANVASES = ["bg-cream-deep", "bg-kraft-soft", "bg-rose-soft"];

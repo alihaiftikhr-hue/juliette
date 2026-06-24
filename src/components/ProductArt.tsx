@@ -144,7 +144,10 @@ export default function ProductArt({
         strokeOpacity="0.18"
         strokeWidth="0.8"
       />
-      {ART[kind]({ accent })}
+      {/* Scale the motif up a touch so it fills the card with more presence */}
+      <g transform="translate(100 100) scale(1.18) translate(-100 -100)">
+        {ART[kind]({ accent })}
+      </g>
     </svg>
   );
 }

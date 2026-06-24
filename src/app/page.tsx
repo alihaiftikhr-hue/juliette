@@ -160,12 +160,12 @@ export default async function Home() {
             <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-8">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-8">
             {CATEGORIES.map((category, i) => (
               <Link
                 key={category}
                 href={`/shop?category=${category.toLowerCase()}`}
-                className="group block text-center"
+                className="group block text-center basis-[calc(50%-0.75rem)] sm:basis-[calc(33.333%-1rem)] lg:basis-[calc(20%-1.2rem)]"
                 aria-label={`Shop ${category}`}
               >
                 <div
