@@ -2,8 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { JulietteEmblem, LeafDivider } from "@/components/Logo";
 import NewsletterForm from "@/components/NewsletterForm";
+import ProductArt from "@/components/ProductArt";
 import ProductCard from "@/components/ProductCard";
 import RevealOnScroll from "@/components/RevealOnScroll";
+import {
+  CARD_ACCENTS,
+  CARD_CANVASES,
+  CATEGORIES,
+  CATEGORY_ART,
+} from "@/data/products";
 import { listProducts } from "@/lib/db";
 import { getVisitorCountry } from "@/lib/geo";
 
@@ -28,7 +35,7 @@ export default async function Home() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative overflow-hidden min-h-[70vh] flex flex-col items-center justify-center text-center px-5 py-16">
+      <section className="relative overflow-hidden min-h-[60vh] sm:min-h-[64vh] flex flex-col items-center justify-center text-center px-5 py-20 sm:py-24">
         {/* Background editorial photo */}
         <Image
           src="/products/lace_cuff.webp"
@@ -55,14 +62,14 @@ export default async function Home() {
         />
 
         <div
-          className="fade-in relative z-10 mt-4 [animation-delay:0.08s]"
+          className="fade-in relative z-10 [animation-delay:0.08s]"
           style={{ filter: "drop-shadow(0 2px 16px rgba(0,0,0,0.45))" }}
         >
-          <JulietteEmblem className="w-[200px] sm:w-[280px] lg:w-[340px] mx-auto text-cream" />
+          <JulietteEmblem className="w-[190px] sm:w-[260px] lg:w-[310px] mx-auto text-cream" />
         </div>
 
         <h1
-          className="fade-up relative z-10 mt-4 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug text-cream [animation-delay:0.22s]"
+          className="fade-up relative z-10 mt-7 sm:mt-8 text-3xl sm:text-4xl lg:text-5xl max-w-2xl mx-auto leading-snug text-cream [animation-delay:0.22s]"
           style={{ textShadow: "0 2px 20px rgba(0,0,0,0.55)" }}
         >
           The little details that make
@@ -71,7 +78,7 @@ export default async function Home() {
         </h1>
 
         {/* Understated text-link CTAs — don't compete with logo or headline */}
-        <div className="fade-up relative z-10 mt-8 flex items-center justify-center gap-8 [animation-delay:0.5s]">
+        <div className="fade-up relative z-10 mt-9 sm:mt-10 flex items-center justify-center gap-8 [animation-delay:0.5s]">
           <Link
             href="/shop"
             className="label-caps !text-[0.62rem] text-cream/90 border-b border-cream/45 pb-px hover:text-cream hover:border-cream transition-colors"
@@ -108,6 +115,42 @@ export default async function Home() {
           ))}
         </div>
       </div>
+
+      {/* ——— Shop by category ——— */}
+      <RevealOnScroll>
+        <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-16 sm:pt-20">
+          <div className="text-center mb-10">
+            <p className="label-caps text-espresso/60">Shop by Category</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">Find your finery</h2>
+            <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-8">
+            {CATEGORIES.map((category, i) => (
+              <Link
+                key={category}
+                href={`/shop?category=${category.toLowerCase()}`}
+                className="group block text-center"
+                aria-label={`Shop ${category}`}
+              >
+                <div
+                  className={`${CARD_CANVASES[i % CARD_CANVASES.length]} relative overflow-hidden aspect-square border border-espresso/10 transition-all duration-500 group-hover:border-espresso/30 group-hover:shadow-xl group-hover:shadow-espresso/5`}
+                >
+                  <ProductArt
+                    kind={CATEGORY_ART[category]}
+                    accent={CARD_ACCENTS[i % CARD_ACCENTS.length]}
+                    className="w-full h-full transition-transform duration-1000 ease-out group-hover:scale-[1.08]"
+                  />
+                  <div className="absolute inset-0 bg-espresso/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+                <h3 className="mt-4 text-xl sm:text-2xl leading-snug group-hover:text-rose transition-colors duration-300">
+                  {category}
+                </h3>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* ——— Featured collection ——— */}
       <RevealOnScroll>
