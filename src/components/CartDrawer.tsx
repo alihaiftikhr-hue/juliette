@@ -1,23 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { formatPrice } from "@/data/products";
-import type { CartItem } from "@/lib/cart";
-
-function buildWAUrl(items: CartItem[], total: number, countryCode: string): string {
-  const lines = items
-    .map((i) => `• ${i.name} ×${i.quantity}  —  ${formatPrice(i.price * i.quantity, countryCode)}`)
-    .join("\n");
-  const msg = [
-    "Hi Juliette! I'd like to place an order:\n",
-    lines,
-    `\nSubtotal: ${formatPrice(total, countryCode)}`,
-    "Please confirm my order and shipping details. Thank you!",
-  ].join("\n");
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP ?? "923001234567";
-  return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-}
 
 export default function CartDrawer() {
   const { items, open, closeCart, removeItem, setQty, totalCount, totalPrice, clearCart, countryCode } =
@@ -147,16 +133,14 @@ export default function CartDrawer() {
               </p>
             </div>
 
-            {/* WhatsApp order button */}
-            <a
-              href={buildWAUrl(items, totalPrice, countryCode)}
-              target="_blank"
-              rel="noopener noreferrer"
+            {/* Proceed to checkout */}
+            <Link
+              href="/checkout"
               onClick={closeCart}
               className="btn w-full text-center block"
             >
-              Order via WhatsApp
-            </a>
+              Checkout
+            </Link>
 
             <button
               onClick={clearCart}

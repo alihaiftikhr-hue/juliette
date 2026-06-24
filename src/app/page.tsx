@@ -72,7 +72,7 @@ export default async function Home() {
       <section className="relative overflow-hidden min-h-[60vh] sm:min-h-[64vh] flex flex-col items-center justify-center text-center px-5 py-20 sm:py-24">
         {/* Background editorial photo */}
         <Image
-          src="/products/lace.jpg"
+          src="/products/lace_cuff.webp"
           alt=""
           fill
           className="object-cover object-center"
