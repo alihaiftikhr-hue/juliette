@@ -16,6 +16,25 @@ import { getVisitorCountry } from "@/lib/geo";
 
 export const dynamic = "force-dynamic";
 
+const FAQ_ITEMS = [
+  {
+    q: "How do the pieces attach?",
+    a: "Everything ties, clips or slips on — no sewing and no alterations. Each piece is designed to move between the clothes you already own.",
+  },
+  {
+    q: "Do you ship worldwide?",
+    a: "Yes. We ship across Pakistan and internationally with tracked, flat-rate delivery. Prices show in your local currency automatically.",
+  },
+  {
+    q: "How do I place an order?",
+    a: "Add your favourites to the cart and tap “Order via WhatsApp”. We’ll confirm availability, shipping and payment with you directly.",
+  },
+  {
+    q: "How should I care for my finery?",
+    a: "Gently hand-wash in cool water and lay flat to dry. Each piece is hand-finished, so a little tenderness keeps it beautiful for years.",
+  },
+];
+
 const MARQUEE_ITEMS = [
   "Once Upon a Cuff",
   "Stitched by Hand · Finished with Love",
@@ -32,17 +51,33 @@ export default async function Home() {
   const featured = (await listProducts()).slice(0, 4);
   const country = await getVisitorCountry();
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_ITEMS.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* ——— Hero ——— */}
       <section className="relative overflow-hidden min-h-[60vh] sm:min-h-[64vh] flex flex-col items-center justify-center text-center px-5 py-20 sm:py-24">
         {/* Background editorial photo */}
         <Image
-          src="/products/lace_cuff.webp"
+          src="/products/lace.jpg"
           alt=""
           fill
           className="object-cover object-center"
           priority
+          sizes="100vw"
           aria-hidden="true"
         />
         {/* Heavy espresso veil — unified, calm, luxe */}
@@ -234,6 +269,55 @@ export default async function Home() {
         </section>
       </RevealOnScroll>
 
+      {/* ——— Testimonials ——— */}
+      <RevealOnScroll>
+        <section className="mx-auto max-w-6xl px-5 sm:px-8 pt-24">
+          <div className="text-center mb-12">
+            <p className="label-caps text-espresso/60">Love Letters</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">What they&rsquo;re saying</h2>
+            <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-3">
+            {[
+              {
+                quote:
+                  "The lace collar arrived wrapped like a gift to myself. Three people asked where my whole outfit was from — it was just the collar.",
+                name: "Hira A.",
+                place: "Lahore",
+              },
+              {
+                quote:
+                  "I wore the Camille cuffs to a wedding and felt like I’d stepped out of a painting. The quality is so much better than I expected.",
+                name: "Sofia R.",
+                place: "London",
+              },
+              {
+                quote:
+                  "Finally, pretty details that don’t need a whole new wardrobe. They ship beautifully and the notes inside are the sweetest touch.",
+                name: "Ayesha K.",
+                place: "Karachi",
+              },
+            ].map((t) => (
+              <figure
+                key={t.name}
+                className="bg-cream-deep border border-espresso/10 px-7 py-8 flex flex-col text-center"
+              >
+                <span className="font-logo text-5xl text-rose leading-none" aria-hidden="true">
+                  &ldquo;
+                </span>
+                <blockquote className="mt-2 text-espresso/85 leading-relaxed italic flex-1">
+                  {t.quote}
+                </blockquote>
+                <figcaption className="label-caps !text-[0.6rem] mt-6 text-espresso/70">
+                  {t.name} · {t.place}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      </RevealOnScroll>
+
       {/* ——— Story teaser ——— */}
       <RevealOnScroll>
         <section className="mt-24 bg-kraft-soft border-y border-espresso/10">
@@ -247,6 +331,34 @@ export default async function Home() {
             <Link href="/our-story" className="btn mt-10">
               Read the Story
             </Link>
+          </div>
+        </section>
+      </RevealOnScroll>
+
+      {/* ——— FAQ ——— */}
+      <RevealOnScroll>
+        <section className="mx-auto max-w-3xl px-5 sm:px-8 pt-24">
+          <div className="text-center mb-10">
+            <p className="label-caps text-espresso/60">Good to Know</p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">Little questions, answered</h2>
+            <LeafDivider className="w-44 mx-auto mt-5 text-espresso/70" />
+          </div>
+
+          <div className="divide-y divide-espresso/12 border-y border-espresso/12">
+            {FAQ_ITEMS.map((item) => (
+              <details key={item.q} className="group py-5">
+                <summary className="flex items-center justify-between cursor-pointer list-none gap-4">
+                  <span className="font-serif text-lg sm:text-xl text-espresso">{item.q}</span>
+                  <span
+                    className="text-rose text-2xl leading-none transition-transform duration-300 group-open:rotate-45 select-none"
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 text-espresso/75 leading-relaxed pr-8">{item.a}</p>
+              </details>
+            ))}
           </div>
         </section>
       </RevealOnScroll>

@@ -9,6 +9,7 @@ import ProductCard from "@/components/ProductCard";
 import { formatPrice } from "@/data/products";
 import { getProduct, listProducts } from "@/lib/db";
 import { getVisitorCountry } from "@/lib/geo";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,20 @@ export async function generateMetadata({
   return {
     title: product.name,
     description: product.blurb,
+    alternates: { canonical: `/shop/${product.slug}` },
+    openGraph: {
+      type: "website",
+      title: `${product.name} · ${SITE_NAME}`,
+      description: product.blurb,
+      url: `${SITE_URL}/shop/${product.slug}`,
+      images: product.image ? [{ url: product.image.src, alt: product.image.alt }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} · ${SITE_NAME}`,
+      description: product.blurb,
+      images: product.image ? [product.image.src] : undefined,
+    },
   };
 }
 
@@ -44,8 +59,31 @@ export default async function ProductPage({
 
   const soldOut = product.stock === 0;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    category: product.category,
+    image: product.image ? [`${SITE_URL}${product.image.src}`] : undefined,
+    brand: { "@type": "Brand", name: SITE_NAME },
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/shop/${product.slug}`,
+      priceCurrency: "PKR",
+      price: product.price,
+      availability: soldOut
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+    },
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-12 sm:pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="label-caps !text-[0.62rem] text-espresso/60 mb-8">
         <Link href="/shop" className="hover:text-rose transition-colors">
@@ -150,7 +188,7 @@ export default async function ProductPage({
         <div className="text-center mb-10">
           <p className="label-caps text-espresso/60">You may also love</p>
         </div>
-        <div className="grid grid-cols-3 gap-x-5 sm:gap-x-8 gap-y-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-12">
           {related.map((p) => (
             <ProductCard key={p.slug} product={p} countryCode={country} />
           ))}
